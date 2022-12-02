@@ -1,6 +1,11 @@
+use day2::calculate_score;
+
+use crate::day2::calculate_outcome_score;
+
 pub mod day1;
+pub mod day2;
 
 fn main() {
-    println!("Max: {}", day1::get_max_calories());
-    println!("Top 3: {}", day1::get_top_3_calories());
+    println!("Day2: {}", calculate_score());
+    println!("Day2-2 {}", calculate_outcome_score());
 }
