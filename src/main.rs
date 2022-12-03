@@ -1,11 +1,11 @@
-use day2::calculate_score;
-
-use crate::day2::calculate_outcome_score;
+use day3::sum_priorities;
+use day3::three_rucksack_priority;
 
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 fn main() {
-    println!("Day2: {}", calculate_score());
-    println!("Day2-2 {}", calculate_outcome_score());
+    println!("Day3: {}", sum_priorities());
+    println!("Day3-2: {}", three_rucksack_priority());
 }
