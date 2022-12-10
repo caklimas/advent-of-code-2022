@@ -1,4 +1,22 @@
 pub fn get_top_stacks<'a>() -> &'a str {
+    let stacks = get_stacks();
+    let step_lines = STEPS.split('\n').collect::<Vec<&str>>();
+    let steps = Vec::new();
+    for step_line in step_lines {
+        let words = step_line.split(" ");
+        let nums = Vec::new();
+        for word in words.into_iter() {
+            if word.chars().all(|x| x.is_numeric()) {
+                nums.push(word.parse());
+            }
+        }
+    }
+    println!("Stacks: {:?}", stacks);
+
+    "hi"
+}
+
+fn get_stacks() -> Vec<Vec<char>> {
     let data_lines = DATA.split('\n').collect::<Vec<&str>>();
     let mut number_indices = Vec::new();
     let last_line = data_lines
@@ -8,30 +26,34 @@ pub fn get_top_stacks<'a>() -> &'a str {
         .collect::<Vec<char>>();
     for (i, c) in last_line.iter().enumerate() {
         if c.is_numeric() {
-            number_indices.push((c.to_digit(10).expect("Can't parse digit"), i));
+            number_indices.push((c.to_digit(10).expect("Can't parse digit") as usize, i));
         }
     }
 
     let mut stacks = Vec::new();
-    for i in (0..=(data_lines.len() - 2)).rev() {
-        println!("i: {}", i);
-        let mut stack = Vec::new();
-        let line = data_lines[i].chars().collect::<Vec<char>>();
-        for number_index in &number_indices {
-            let index = number_index.1;
-            let char = line[index];
-
-            if char.is_alphabetic() {
-                stack.push(line[index]);
-            }
-        }
-
-        stacks.push(stack);
+    for _i in 0..data_lines.len() {
+        stacks.push(Vec::new());
     }
 
-    println!("Stacks: {:?}", stacks);
+    for i in (0..=(data_lines.len() - 2)).rev() {
+        let line = data_lines[i].chars().collect::<Vec<char>>();
+        for (number, number_index) in &number_indices {
+            let index = number_index;
+            let char = line[*index];
 
-    "hi"
+            if char.is_alphabetic() {
+                stacks[number - 1].push(char);
+            }
+        }
+    }
+
+    stacks
+}
+
+struct Step {
+    pub number: u8,
+    pub from: u8,
+    pub to: u8,
 }
 
 const DATA: &str = "[N]             [R]             [C]
