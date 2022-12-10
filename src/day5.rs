@@ -1,19 +1,36 @@
-pub fn get_top_stacks<'a>() -> &'a str {
-    let stacks = get_stacks();
+pub fn get_top_stacks() -> String {
+    let mut stacks = get_stacks();
     let step_lines = STEPS.split('\n').collect::<Vec<&str>>();
-    let steps = Vec::new();
+    let mut steps = Vec::new();
     for step_line in step_lines {
         let words = step_line.split(" ");
-        let nums = Vec::new();
+        let mut nums = Vec::new();
         for word in words.into_iter() {
             if word.chars().all(|x| x.is_numeric()) {
-                nums.push(word.parse());
+                nums.push(word.parse().expect("Can't parse to u8"));
             }
         }
-    }
-    println!("Stacks: {:?}", stacks);
 
-    "hi"
+        steps.push(Step {
+            number: nums[0],
+            from: nums[1],
+            to: nums[2],
+        });
+    }
+
+    for step in steps.iter() {
+        for _i in 0..step.number {
+            let c = stacks[step.from - 1].pop().expect("No char found");
+            stacks[step.to - 1].push(c);
+        }
+    }
+
+    let mut chars = Vec::new();
+    for i in 0..stacks.len() {
+        chars.push(stacks[i].pop().expect("No char found"));
+    }
+
+    chars.into_iter().collect()
 }
 
 fn get_stacks() -> Vec<Vec<char>> {
@@ -50,10 +67,11 @@ fn get_stacks() -> Vec<Vec<char>> {
     stacks
 }
 
+#[derive(Debug)]
 struct Step {
-    pub number: u8,
-    pub from: u8,
-    pub to: u8,
+    pub number: usize,
+    pub from: usize,
+    pub to: usize,
 }
 
 const DATA: &str = "[N]             [R]             [C]
