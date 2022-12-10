@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 pub fn get_top_stacks() -> String {
     let mut stacks = get_stacks();
     let step_lines = STEPS.split('\n').collect::<Vec<&str>>();
@@ -22,6 +24,46 @@ pub fn get_top_stacks() -> String {
         for _i in 0..step.number {
             let c = stacks[step.from - 1].pop().expect("No char found");
             stacks[step.to - 1].push(c);
+        }
+    }
+
+    let mut chars = Vec::new();
+    for i in 0..stacks.len() {
+        chars.push(stacks[i].pop().expect("No char found"));
+    }
+
+    chars.into_iter().collect()
+}
+
+pub fn get_top_stacks_retaining_order() -> String {
+    let mut stacks = get_stacks();
+    let step_lines = STEPS.split('\n').collect::<Vec<&str>>();
+    let mut steps = Vec::new();
+    for step_line in step_lines {
+        let words = step_line.split(" ");
+        let mut nums = Vec::new();
+        for word in words.into_iter() {
+            if word.chars().all(|x| x.is_numeric()) {
+                nums.push(word.parse().expect("Can't parse to u8"));
+            }
+        }
+
+        steps.push(Step {
+            number: nums[0],
+            from: nums[1],
+            to: nums[2],
+        });
+    }
+
+    for step in steps.iter() {
+        let mut crates_to_push = VecDeque::new();
+        for _i in 0..step.number {
+            let c = stacks[step.from - 1].pop().expect("No char found");
+            crates_to_push.push_front(c);
+        }
+
+        for crate_to_push in crates_to_push {
+            stacks[step.to - 1].push(crate_to_push);
         }
     }
 

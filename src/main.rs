@@ -5,5 +5,5 @@ pub mod day4;
 pub mod day5;
 
 fn main() {
-    println!("Day5: {}", day5::get_top_stacks());
+    println!("Day5: {}", day5::get_top_stacks_retaining_order());
 }
